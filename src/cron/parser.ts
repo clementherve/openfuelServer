@@ -5,6 +5,8 @@
 // import { JSZip } from "jszip";
 // import convert from 'xml-js';
 
+
+// https://stackoverflow.com/questions/56650711/cannot-find-module-that-is-defined-in-tsconfig-paths
 import JSZip from '../../node_modules/jszip/index';
 import convert from '../../node_modules/xml-js/lib/index.js';
 import { _getOr } from './utils/getor';
