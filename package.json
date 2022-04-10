@@ -1,5 +1,6 @@
 {
   "module": "esnext",
+  "type": "module",
   "scripts": {
     "build": "npx tsc --watch"
   },
