@@ -1,15 +1,9 @@
-// const _getOr = require('../utils/getor');
-// const convert = require('xml-js');
-// const JSZip = require('jszip');
+import _getOr from '../utils/getor.js';
+// @ts-ignore
+import converter from 'xml-js';
+import { Unzipped, unzipSync } from 'fflate';
+import iconvlite from 'iconv-lite';
 
-// import { JSZip } from "jszip";
-// import convert from 'xml-js';
-
-
-// https://stackoverflow.com/questions/56650711/cannot-find-module-that-is-defined-in-tsconfig-paths
-import JSZip from '../../node_modules/jszip/index';
-import convert from '../../node_modules/xml-js/lib/index.js';
-import { _getOr } from './utils/getor';
 
 // Types
 type TimeSpan = 'instantane' | 'jour' | 'annee';
@@ -46,16 +40,17 @@ type GasStation = {
     'prices': Fuel[]
 }
 
+
 /**
  * Unzip the file and extract a file named "PrixCarburants_*.csv"
  * @param zipData the raw data from the zip
  * @param span any value of: 'instantane' | 'jour' | 'annee'
  * @returns raw XML (unparsed).
  */
-const _getXML = async (zipData: string, span: TimeSpan): Promise<string> => {
-    return (await JSZip.loadAsync(zipData))
-        .file(`PrixCarburants_${span}.xml`)
-        .async("string");
+const _getXML = async (zipData: Buffer): Promise<string> => {
+    const uncompressed: Unzipped = unzipSync(zipData);
+    const xmlByteArray: Uint8Array = uncompressed[Object.keys(uncompressed)[0]];
+    return iconvlite.decode(Buffer.from(xmlByteArray), 'ISO-8859-1');
 }
 
 const _parseFuel = (json: any): Fuel => {
@@ -110,7 +105,7 @@ const _parseOpeningHour = (json: any): OpeningHour => {
 }
 
 const _parseGasStation = (xml: string): GasStation[] => {
-    const rawJSON = convert.xml2json(xml, { compact: true, spaces: 4 });
+    const rawJSON = converter.xml2json(xml, { compact: true, spaces: 4 });
 
     const json = JSON.parse(rawJSON);
     return json['pdv_liste']['pdv'].map((station: any): GasStation | undefined => {
@@ -148,4 +143,6 @@ const _parseGasStation = (xml: string): GasStation[] => {
     }).filter((station: any) => station != undefined);
 }
 
-export { _parseGasStation, _getXML, TimeSpan, GasStation, OpeningDay, OpeningHour, Fuel };
+
+export type { TimeSpan, GasStation, OpeningHour, OpeningDay, Fuel }
+export { _parseGasStation, _getXML };

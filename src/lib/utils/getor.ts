@@ -9,4 +9,4 @@ const _getOr = (json: any, key: string): string => {
     return json.hasOwnProperty(key) ? json[key] : '--';
 }
 
-export { _getOr };
+export default _getOr;
