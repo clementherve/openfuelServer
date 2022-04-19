@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { readFileSync } from 'fs';
 import { GasStation, TimeSpan, _getXML, _parseGasStation } from "./parsers/gas_station_parser.js";
 
 /**
@@ -9,8 +10,8 @@ import { GasStation, TimeSpan, _getXML, _parseGasStation } from "./parsers/gas_s
 const _loadPrices = async (span: TimeSpan): Promise<Buffer> => {
     const response = (await axios({
         method: 'get',
-        // url: `https://donnees.roulez-eco.fr/opendata/${span}`,
-        url: `http://localhost:8080/zip`,
+        url: `https://donnees.roulez-eco.fr/opendata/${span}`,
+        // url: `http://localhost:8080/zip`,
         responseType: 'arraybuffer',
         decompress: true,
         headers: {}
@@ -27,10 +28,8 @@ const getInstantPrices = async (): Promise<GasStation[]> => {
     return _parseGasStation(await _getXML(await _loadPrices('instantane')));
 }
 
-const getNames = async (): Promise<string[]> => {
-
-    throw 'not implemented';
-    return [];
+const getNames = async (): Promise<object> => {
+    return JSON.parse(readFileSync('json/stations_names.json', 'utf-8'));
 }
 
 export { getInstantPrices, getNames };

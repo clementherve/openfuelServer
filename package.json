@@ -2,8 +2,8 @@
   "type": "module",
   "scripts": {
     "transpile": "npx tsc --watch",
-    "debug": "nodemon out/api.js",
-    "start": "node out/api.js",
+    "debug": "nodemon out/server.js",
+    "start": "node out/server.js",
     "cron": ""
   },
   "dependencies": {

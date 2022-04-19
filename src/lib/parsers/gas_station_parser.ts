@@ -1,11 +1,11 @@
 import _getOr from '../utils/getor.js';
-// @ts-ignore
 import converter from 'xml-js';
 import { Unzipped, unzipSync } from 'fflate';
 import iconvlite from 'iconv-lite';
 
 
-// Types
+// @ts-ignore
+// Types 
 type TimeSpan = 'instantane' | 'jour' | 'annee';
 
 type Fuel = {

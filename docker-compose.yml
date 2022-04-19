@@ -1,7 +1,17 @@
 services:
-  openfuel-api:
-    build: .
+  openfuel-mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     ports:
-      - "8000:5000"
+      - "27017:27017"
     volumes:
-      - .:/code
+      - ./mongo:/data/db
+    
+  # openfuel-server:
+  #   build: .
+  #   ports:
+  #     - "8000:5000"
+  #   volumes:
+  #     - .:/code
